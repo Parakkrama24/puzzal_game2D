@@ -1,30 +1,27 @@
-using TMPro;
+using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.UIElements;
 
-public class gamescript2 : MonoBehaviour
+public class gameascrip1stLevel : MonoBehaviour
 {
     [Header("SerializeField")]
     [SerializeField] private Transform Emptyspace;
     [SerializeField] private Tilescript[] tiles;
     [SerializeField] private GameObject winPanal;
-    public TextMeshProUGUI HighScorText;
-    public timer _timer;
 
 
     private Camera Maincamara;
     private bool _isFinished;
-    private int EmptyspaceIndex=8;
+    private int EmptyspaceIndex = 8;
 
     // Start is called before the first frame update
     void Start()
-    {winPanal.SetActive(false);
+    {
+        winPanal.SetActive(false);
         shuffle();//call the shuffle function
         Maincamara = Camera.main;//assign the main camera to the main camera variable
-        HighScorText.text=PlayerPrefs.GetInt("HighScore",0).ToString();//display the high score
 
- 
     }
 
     public void restart()//restart the game
@@ -44,7 +41,7 @@ public class gamescript2 : MonoBehaviour
                 if (Vector2.Distance(Emptyspace.position, hit.transform.position) <= 1.25)
                 {
                     Vector2 temp = Emptyspace.position;//assinge the position of the empty space to a temp variable
-                    Tilescript thistile=hit.transform.GetComponent<Tilescript>();//get the tilescript of the tile that was clicked
+                    Tilescript thistile = hit.transform.GetComponent<Tilescript>();//get the tilescript of the tile that was clicked
                     Emptyspace.position = thistile.targetPotion;//asign the target position of the tile that was clicked to the empty space
                     thistile.targetPotion = temp;//asgin the temp variable to the target position of the tile that was clicked
                     int tileIndex = findTileIndex(thistile);// call the findTileIndex function to find the index of the tile that was clicked
@@ -79,22 +76,19 @@ public class gamescript2 : MonoBehaviour
                 _isFinished = true;
                 winPanal.SetActive(true);//activate the win panal
                 Debug.Log("You win");
-                if (_timer.timerValue > PlayerPrefs.GetInt("HighScore", 0))
-                { 
-               PlayerPrefs.SetInt("HighScore", _timer.timerValue);//save the high score
-                    HighScorText.text = _timer.timerValue.ToString();
-                }
+
             }
         }
     }
     public void shuffle()//shuffle the tiles
-    {if(EmptyspaceIndex!=8)
+    {
+        if (EmptyspaceIndex != 8)
         {
-            var tileOn8lastPos= tiles[8].targetPotion;//assign the target position of the tile in the 8th index to a variable
+            var tileOn8lastPos = tiles[8].targetPotion;//assign the target position of the tile in the 8th index to a variable
             tiles[8].targetPotion = Emptyspace.position;//assign the position of the empty space to the target position of the tile in the 15th index
             Emptyspace.position = tileOn8lastPos;//assing the variable to the position of the empty space
-            tiles[EmptyspaceIndex] =tiles[8];//assign the tile in the empty space index to the tile in the 8th index
-            tiles[8] =null;//assing null to the tile in the 8th index
+            tiles[EmptyspaceIndex] = tiles[8];//assign the tile in the empty space index to the tile in the 8th index
+            tiles[8] = null;//assing null to the tile in the 8th index
             EmptyspaceIndex = 8;//assign 15 to the empty space index
         }
         int invertion;
@@ -113,13 +107,13 @@ public class gamescript2 : MonoBehaviour
             }
             invertion = GetInversions();//call and get the count of inversions
             Debug.Log(invertion);//print the count of inversions
-        }while(invertion%2 !=0 );
+        } while (invertion % 2 != 0);
     }
-   public int findTileIndex(Tilescript ts)
+    public int findTileIndex(Tilescript ts)
     {
-        for (int i = 0; i < tiles.Length;i++)
+        for (int i = 0; i < tiles.Length; i++)
         {
-            if (tiles[i]!= null)
+            if (tiles[i] != null)
             {
                 if (tiles[i] == ts) { return i; }//return the index of the tile if the tile is found
             }
